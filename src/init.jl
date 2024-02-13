@@ -1,3 +1,11 @@
+function version()
+    v = ccall((:lzo_version, liblzo2),
+        Cuint,
+        (),
+    )
+    return v
+end
+
 function __init__()
     # The LZO library initialization method takes parameters that check that the following values are consistent between the compiled library and the code calling it:
     # 1. the version of the library (must be != 0)
@@ -14,7 +22,7 @@ function __init__()
     e = ccall((:__lzo_init_v2, liblzo2),
         Cint,
         (Cuint, Cint, Cint, Cint, Cint, Cint, Cint, Cint, Cint, Cint),
-        1, -1, -1, -1, -1, -1, -1, -1, -1, -1)
+        version(), sizeof(Cshort), sizeof(Cint), sizeof(Clong), 4, 8, sizeof(Ptr{Cvoid}), sizeof(Ptr{Cchar}), sizeof(Ptr{Cvoid}), -1)
     if e != 0
         throw(ErrorException("initialization of liblzo2 failed: $e"))
     end

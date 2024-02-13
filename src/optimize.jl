@@ -56,11 +56,11 @@ The `algorithm` argument, if given, can be an instance of an `AbstractLZOAlgorit
 Keyword arguments `kwargs`, if given, are passed to the algorithm struct constructors. See the documentation for the specific algorithm type for more information about valid keyword arguments and defaults.
 
 !!! note
-    Optimizing compressed data rarely produces any marked difference in compression ratios or decompression speed.
+    Optimizing compressed data involves splitting "long" literal copy commands into one "short" and one "long" run, then embedding the "short" literal copy into the the previous history copy command, thereby saving up to two bytes from each "long" literal copy command. The particular circumstances under which this optimization can occur happens in only about 1% of literal copy commands and can save at most about 1% of that command's total length, so optimization is only recommended when a 0.01% improvement in compression ratio is absolutely necessary. Also note that any increase in compression ratio achieved through optimization marginally increases the processing time required to decompress the data.
 """
 function optimize!(algo::AbstractLZOAlgorithm, src::AbstractVector{UInt8})
     isempty(src) && return UInt8[] # empty always compresses to empty
-    # the length of the working data has to be able to hold the extracted literals, so estimate the largest size
+    # the length of the working data has to be able to hold the extracted literals, so over-estimate the largest size
     dest = zeros(UInt8, length(src) * 256)
     unsafe_optimize!(algo, dest, src)
     return src

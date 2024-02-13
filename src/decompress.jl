@@ -37,15 +37,13 @@ unsafe_decompress!(dest, src; kwargs...) = unsafe_decompress!(LZO1X_1, dest, src
 """
     decompress([algorithm], src::AbstractVector{UInt8}; [kwargs...])::Vector{UInt8}
 
-Decompress `src` using LZO algorithm `algorithm`.
+Decompress `src` using LZO algorithm `algorithm`. Only available for algorithms with safe decompression functions defined.
 
 Returns a `Vector{UInt8}` loaded with the decompressed version of `src`.
 
 The `algorithm` argument, if given, can be an instance of an `AbstractLZOAlgorithm`, a `Type{<:AbstractLZOAlgorithm}`, or a `Symbol` or `String` that names an LZO algorithm. The supported decompression algorithm types are listed below--the symbol and string versions are the same, case-sensitive characters as the type name:
 
 - `LZO1X_1`, `:LZO1X_1`, or `"LZO1X_1"` (also `LZO1X`, `LZO`, `LZO1X_1_11`, `LZO1X_1_12`, `LZO1X_1_15`, or `LZO1X_999`, and is the default if no algorithm is given)
-- `LZO1` (also `LZO1_99`)
-- `LZO1A` (also `LZO1A_99`)
 - `LZO1B_1` (also `LZO1B`, `LZO1B_2`, `LZO1B_3`, `LZO1B_4`, `LZO1B_5`, `LZO1B_6`, `LZO1B_7`, `LZO1B_8`, `LZO1B_9`, `LZO1B_99`, or `LZO1B_999`)
 - `LZO1C_1` (also `LZO1C`, `LZO1C_2`, `LZO1C_3`, `LZO1C_4`, `LZO1C_5`, `LZO1C_6`, `LZO1C_7`, `LZO1C_8`, `LZO1C_9`, `LZO1C_99`, or `LZO1C_999`)
 - `LZO1F_1` (also `LZO1F` or `LZO1F_999`)
