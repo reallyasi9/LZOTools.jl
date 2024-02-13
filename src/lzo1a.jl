@@ -1,5 +1,5 @@
-const LZO1A_WORKING_MEMORY_SIZE = 1<<15
-const LZO1A_99_WORKING_MEMORY_SIZE = 1<<19 # not 1<<18, as documentation suggests
+const LZO1A_WORKING_MEMORY_SIZE = 1<<17
+const LZO1A_99_WORKING_MEMORY_SIZE = 1<<20
 
 """
     LZO1A
@@ -53,7 +53,7 @@ function _ccall_compress!(algo::LZO1A_99, dest::Ptr{UInt8}, src::Ptr{UInt8}, src
     return size_ptr[], err
 end
 
-# all LZO1 algorithms use the same decompression algorithm
+# all LZO1A algorithms use the same decompression algorithm
 for algo = (:LZO1A_99,)
     @eval unsafe_decompress!(::$algo, dest::AbstractVector{UInt8}, src::AbstractVector{UInt8}) = unsafe_decompress!(LZO1A, dest, src)
 end

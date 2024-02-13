@@ -1,5 +1,5 @@
-const LZO1_WORKING_MEMORY_SIZE = 1<<15
-const LZO1_99_WORKING_MEMORY_SIZE = 1<<19 # not 1<<18, as documentation suggests
+const LZO1_WORKING_MEMORY_SIZE = 1<<17
+const LZO1_99_WORKING_MEMORY_SIZE = 1<<20
 
 """
     LZO1
