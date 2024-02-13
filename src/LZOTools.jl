@@ -20,6 +20,10 @@ An abstract type from which specific LZO compression and decompression algorithm
 """
 abstract type AbstractLZOAlgorithm end
 
+@static if VERSION < v"1.9"
+    include("compat.jl")
+end
+
 include("init.jl")
 include("compress.jl")
 include("decompress.jl")
