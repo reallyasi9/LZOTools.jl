@@ -109,4 +109,22 @@ end
     end
 end
 
+@testitem "lzo1y compress Canterbury" begin
+    using LazyArtifacts
+
+    let 
+        algos = (
+            LZO1Y_1, LZO1Y_999
+        )
+        cc_path = artifact"CanterburyCorpus"
+        for fn in readdir(cc_path; sort=true, join=true)
+            for algo in algos
+                truth = read(fn)
+                c = compress(algo, truth)
+                @test length(c) < length(truth)
+            end
+        end
+    end
+end
+
 @run_package_tests verbose = true

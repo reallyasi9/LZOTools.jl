@@ -12,7 +12,8 @@ export LZO1, LZO1_99
 export LZO1A, LZO1A_99
 export LZO1B, LZO1B_99
 export LZO1C, LZO1C_99, LZO1C_999
-export LZO1F_1, LZO1F_999
+export LZO1F_1, LZO1F, LZO1F_999
+export LZO1Y_1, LZO1Y, LZO1Y_999
 
 """
     AbstractLZOAlgorithm
@@ -35,6 +36,7 @@ include("lzo1a.jl")
 include("lzo1b.jl")
 include("lzo1c.jl")
 include("lzo1f.jl")
+include("lzo1y.jl")
 include("lookup.jl")
 
 end
