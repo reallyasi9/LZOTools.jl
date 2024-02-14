@@ -15,4 +15,7 @@ const _SYMBOL_LOOKUP = Dict{Symbol,Type{<:AbstractLZOAlgorithm}}(
     :LZO1C => LZO1C,
     :LZO1C_99 => LZO1C_99,
     :LZO1C_999 => LZO1C_999,
+    :LZO1F_1 => LZO1F_1,
+    :LZO1F => LZO1F_1, # alias
+    :LZO1F_999 => LZO1F_999,
 )
