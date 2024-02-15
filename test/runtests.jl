@@ -115,8 +115,10 @@ end
             for level in 1:9
                 algo_obj = algo(; compression_level=level)
                 c = compress(algo_obj, truth)
+                d = decompress(algo_obj, c)
                 @info "level compression complete" algorithm=algo level=level ratio=length(c)/length(truth)
                 @test length(c) <= length(truth)
+                @test d == truth
                 if length(c) > last_size
                     @warn "unexpectedly worse ratio" algorithm=algo level=level ratio=length(c)/length(truth) last_ratio=last_size/length(truth)
                 end
