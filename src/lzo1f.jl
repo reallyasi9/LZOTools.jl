@@ -32,7 +32,7 @@ end
 
 function _ccall_safe_decompress!(algo::LZO1F_1, dest::Ptr{UInt8}, dest_size::Integer, src::Ptr{UInt8}, src_size::Integer)
     size_ptr = Ref{Csize_t}(dest_size)
-    err = @ccall liblzo2.lzo1c_decompress_safe(src::Ptr{Cuchar}, src_size::Csize_t, dest::Ptr{Cuchar}, size_ptr::Ptr{Csize_t}, algo.working_memory::Ptr{Cvoid})::Cint
+    err = @ccall liblzo2.lzo1f_decompress_safe(src::Ptr{Cuchar}, src_size::Csize_t, dest::Ptr{Cuchar}, size_ptr::Ptr{Csize_t}, algo.working_memory::Ptr{Cvoid})::Cint
     return size_ptr[], err
 end
 
