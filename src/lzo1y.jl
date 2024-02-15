@@ -18,7 +18,6 @@ const LZO1Y = LZO1Y_1
 
 function _ccall_compress!(algo::LZO1Y_1, dest::Ptr{UInt8}, src::Ptr{UInt8}, src_size::Integer)
     @boundscheck checkbounds(algo.working_memory, LZO1Y_1_WORKING_MEMORY_SIZE)
-    fill!(algo.working_memory, UInt8(0))
     size_ptr = Ref{Csize_t}()
     err = @ccall liblzo2.lzo1y_1_compress(src::Ptr{Cuchar}, src_size::Csize_t, dest::Ptr{Cuchar}, size_ptr::Ptr{Csize_t}, algo.working_memory::Ptr{Cvoid})::Cint
     return size_ptr[], err
@@ -82,7 +81,6 @@ end
 
 function _ccall_compress!(algo::LZO1Y_999, dest::Ptr{UInt8}, src::Ptr{UInt8}, src_size::Integer)
     @boundscheck checkbounds(algo.working_memory, LZO1Y_999_WORKING_MEMORY_SIZE)
-    fill!(algo.working_memory, UInt8(0))
     size_ptr = Ref{Csize_t}()
     err = @ccall liblzo2.lzo1y_999_compress_level(src::Ptr{Cuchar}, src_size::Csize_t, dest::Ptr{Cuchar}, size_ptr::Ptr{Csize_t}, algo.working_memory::Ptr{Cvoid}, C_NULL::Ptr{Cuchar}, 0::Csize_t, C_NULL::Ptr{Cuchar}, algo.compression_level::Cint)::Cint
     return size_ptr[], err
