@@ -141,7 +141,9 @@ end
             for algo in algos
                 c = compress(algo, truth)
                 o = optimize!(algo, copy(c))
-                @info "optimization complete" algorithm=algo filename=last(splitpath(fn)) original_ratio=length(c)/length(truth) optimized_ratio=length(o)/length(truth) Δ=length(o)-length(c)
+                smaller_size = min(length(c), length(o))
+                ndiff = count(@view(c[begin:smaller_size]) .!= @view(o[begin:smaller_size])) + abs(length(c) - length(o))
+                @info "optimization complete" algorithm=algo filename=last(splitpath(fn)) original_ratio=length(c)/length(truth) optimized_ratio=length(o)/length(truth) Δ=length(o)-length(c) diff_ratio=ndiff/length(truth)
                 @test length(o) < length(truth)
                 @test length(o) <= length(c)
             end

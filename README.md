@@ -138,3 +138,13 @@ The safe decompression method `decompress` works by attempting to decompress the
 
 ### Optimization doesn't do much, if anything at all
 The optimization feature of the LZO1X and LZO1Y family of algorithms attempts to shuffle around literal copy commands to save on storage and potentially improve decompression speed. Because of the rarity of the special circumstances required to shuffle the literal copy commands around, optimization is expected to reduce the number of bytes necessary to store the compressed data by at most 0.01%, and benchmarks I have performed on modern processors show no difference in decompression speeds between optimized and unoptimized data. The methods are included for completeness' sake, but I do not recommend their use.
+
+Because the compressed data have to be completely decompressed into memory during the optimization process, the safe `optimize!` method has to allocate enough memory to guarantee the decompressed data will fit, and that is typically 100 times more memory than necessary. If you insist on optimizing your data, I recommend running `unsafe_optimize!` immediately after `compress`, using the original source data as the destination for `unsafe_optimize!`. This guarantees that there will be just enough memory available to perform the optimization:
+
+```julia
+lorem_copy = copy(lorem) # just to prove everything works (not necessary in production)
+
+compressed = compress(LZO1X, lorem)
+unsafe_optimize!(LZO1X, lorem, compressed) # use the original data as the output location for the decompression
+@assert lorem == lorem_copy # still the same
+```
