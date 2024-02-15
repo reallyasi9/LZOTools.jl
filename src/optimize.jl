@@ -25,7 +25,7 @@ Keyword arguments `kwargs`, if given, are passed to the algorithm struct constru
 function unsafe_optimize!(algo::AbstractLZOAlgorithm, dest::AbstractVector{UInt8}, src::AbstractVector{UInt8})
     output_size, err = GC.@preserve dest src _ccall_optimize!(algo, pointer(dest), pointer(src), length(src))
     if err != 0
-        throw(ErrorException("lzo optimization error $e"))
+        throw(ErrorException("lzo optimization error $err"))
     end
     return output_size
 end
