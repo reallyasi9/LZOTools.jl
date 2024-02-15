@@ -77,7 +77,7 @@ decompress(algo::AbstractString, src; kwargs...) = decompress(Symbol(algo), src;
 decompress(src; kwargs...) = decompress(LZO1X_1, src; kwargs...)
 
 # Call unsafe decompression library function from the algorithm struct
-_ccall_unsafe_decompress!(algo::AbstractLZOAlgorithm, dest::Ptr{UInt8}, src::Ptr{UInt8}, src_size::Integer) = nothing
+_ccall_unsafe_decompress!(algo::AbstractLZOAlgorithm, dest::Ptr{UInt8}, src::Ptr{UInt8}, src_size::Integer) = throw(ErrorException("method _ccall_unsafe_decompress! for algorithm $(typeof(algo)) not defined"))
 
 # Call safe decompression library function from the algorithm struct
-_ccall_safe_decompress!(algo::AbstractLZOAlgorithm, dest::Ptr{UInt8}, dest_size::Integer, src::Ptr{UInt8}, src_size::Integer) = nothing
+_ccall_safe_decompress!(algo::AbstractLZOAlgorithm, dest::Ptr{UInt8}, dest_size::Integer, src::Ptr{UInt8}, src_size::Integer) = throw(ErrorException("method _ccall_safe_decompress! for algorithm $(typeof(algo)) not defined"))
