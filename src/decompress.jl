@@ -16,8 +16,8 @@ The `algorithm` argument, if given, can be an instance of an `AbstractLZOAlgorit
 - `LZO1C_1` (also `LZO1C`, `LZO1C_2`, `LZO1C_3`, `LZO1C_4`, `LZO1C_5`, `LZO1C_6`, `LZO1C_7`, `LZO1C_8`, `LZO1C_9`, `LZO1C_99`, or `LZO1C_999`)
 - `LZO1F_1` (also `LZO1F` or `LZO1F_999`)
 - `LZO1Y_1` (also `LZO1Y` or `LZO1Y_999`)
-- `LZO1Z_999`
-- `LZO2A_999`
+- `LZO1Z_999` (also `LZO1Z`)
+- `LZO2A_999` (also `LZO2A`)
 
 Keyword arguments `kwargs`, if given, are passed to the algorithm struct constructors. See the documentation for the specific algorithm type for more information about valid keyword arguments and defaults.
 """
@@ -48,8 +48,8 @@ The `algorithm` argument, if given, can be an instance of an `AbstractLZOAlgorit
 - `LZO1C_1` (also `LZO1C`, `LZO1C_2`, `LZO1C_3`, `LZO1C_4`, `LZO1C_5`, `LZO1C_6`, `LZO1C_7`, `LZO1C_8`, `LZO1C_9`, `LZO1C_99`, or `LZO1C_999`)
 - `LZO1F_1` (also `LZO1F` or `LZO1F_999`)
 - `LZO1Y_1` (also `LZO1Y` or `LZO1Y_999`)
-- `LZO1Z_999`
-- `LZO2A_999`
+- `LZO1Z_999` (also `LZO1Z`)
+- `LZO2A_999` (also `LZO2A`)
 
 Keyword arguments `kwargs`, if given, are passed to the algorithm struct constructors. See the documentation for the specific algorithm type for more information about valid keyword arguments and defaults.
 """
