@@ -23,7 +23,7 @@ The `algorithm` argument, if given, can be an instance of an `AbstractLZOAlgorit
 Keyword arguments `kwargs`, if given, are passed to the algorithm struct constructors. See the documentation for the specific algorithm type for more information about valid keyword arguments and defaults.
 """
 function unsafe_optimize!(algo::AbstractLZOAlgorithm, dest::AbstractVector{UInt8}, src::AbstractVector{UInt8})
-    output_size, err = GC.@preserve dest src _ccall_optimize!(algo, pointer(dest), pointer(src), length(src))
+    output_size, err = GC.@preserve dest src _ccall_optimize!(algo, pointer(dest), length(dest), pointer(src), length(src))
     if err != 0
         throw(ErrorException("lzo optimization error $err"))
     end
@@ -72,4 +72,4 @@ optimize!(algo::AbstractString, src; kwargs...) = optimize!(Symbol(algo), src; k
 optimize!(src; kwargs...) = optimize!(LZO1X_1, src; kwargs...)
 
 # Call optimization library function from the algorithm struct
-_ccall_optimize!(algo::AbstractLZOAlgorithm, dest::Ptr{UInt8}, src::Ptr{UInt8}, src_size::Integer) = nothing
+_ccall_optimize!(algo::AbstractLZOAlgorithm, dest::Ptr{UInt8}, dest_size::Integer, src::Ptr{UInt8}, src_size::Integer) = throw(ErrorException("method _ccall_optimize! for algorithm $(typeof(algo)) not defined"))

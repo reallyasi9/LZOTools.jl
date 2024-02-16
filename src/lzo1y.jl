@@ -47,8 +47,8 @@ function decompress(::Type{LZO1Y_1}, src; kwargs...)
     return decompress(algo, src)
 end
 
-function _ccall_optimize!(algo::LZO1Y_1, dest::Ptr{UInt8}, src::Ptr{UInt8}, src_size::Integer)
-    size_ptr = Ref{Csize_t}()
+function _ccall_optimize!(algo::LZO1Y_1, dest::Ptr{UInt8}, dest_size::Integer, src::Ptr{UInt8}, src_size::Integer)
+    size_ptr = Ref{Csize_t}(dest_size)
     err = @ccall liblzo2.lzo1y_optimize(src::Ptr{Cuchar}, src_size::Csize_t, dest::Ptr{Cuchar}, size_ptr::Ptr{Csize_t}, algo.working_memory::Ptr{Cvoid})::Cint
     return size_ptr[], err
 end
