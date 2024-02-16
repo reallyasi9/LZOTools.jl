@@ -60,7 +60,7 @@ Keyword arguments `kwargs`, if given, are passed to the algorithm struct constru
 """
 function optimize!(algo::AbstractLZOAlgorithm, src::AbstractVector{UInt8})
     isempty(src) && return UInt8[] # empty always compresses to empty
-    # the length of the working data has to be able to hold the extracted literals, so over-estimate the largest size
+    # the length of the working data has to be able to hold the extracted literals, so over-estimate the largest possible size
     dest = zeros(UInt8, length(src) * 256)
     unsafe_optimize!(algo, dest, src)
     return src

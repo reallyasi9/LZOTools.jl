@@ -1,14 +1,14 @@
 ```@meta
-CurrentModule = LZOTools
+CurrentModule = LibLZO
 ```
 
-# LZOTools
+# LibLZO
 
-Documentation for [LZOTools](https://github.com/reallyasi9/LZOTools.jl).
+Documentation for [LibLZO](https://github.com/reallyasi9/LibLZO.jl).
 
 ```@index
 ```
 
 ```@autodocs
-Modules = [LZOTools]
+Modules = [LibLZO]
 ```

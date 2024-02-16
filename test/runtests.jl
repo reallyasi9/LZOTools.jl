@@ -1,4 +1,4 @@
-using LZOTools
+using LibLZO
 using TestItemRunner
 
 @testitem "Canterbury safe round-trip" begin

@@ -1,4 +1,4 @@
-name = "LZOTools"
+name = "LibLZO"
 uuid = "32aa4ff1-cc5a-4ead-abec-09bb076ef871"
 authors = ["Phil Killewald <reallyasi9@users.noreply.github.com> and contributors"]
 version = "1.0.0"

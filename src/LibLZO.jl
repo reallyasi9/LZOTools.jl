@@ -1,4 +1,4 @@
-module LZOTools
+module LibLZO
 using LZO_jll
 
 export compress, unsafe_compress!

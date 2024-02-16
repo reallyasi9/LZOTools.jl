@@ -1,10 +1,10 @@
-# LZOTools.jl
+# LibLZO.jl
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://reallyasi9.github.io/LZOTools.jl/stable/)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://reallyasi9.github.io/LZOTools.jl/dev/)
-[![Build Status](https://github.com/reallyasi9/LZOTools.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/reallyasi9/LZOTools.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://reallyasi9.github.io/LibLZO.jl/stable/)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://reallyasi9.github.io/LibLZO.jl/dev/)
+[![Build Status](https://github.com/reallyasi9/LibLZO.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/reallyasi9/LibLZO.jl/actions/workflows/CI.yml?query=branch%3Amain)
 
-Add a Julia interface to [liblzo2](https://www.oberhumer.com/opensource/lzo/).
+A Julia interface to [liblzo2](https://www.oberhumer.com/opensource/lzo/).
 
 ## Synopsis
 
@@ -12,13 +12,13 @@ Install:
 
 ```julia
 using Pkg
-Pkg.add("LZOTools")
+Pkg.add("LibLZO")
 ```
 
 Compress and decompress bytes:
 
 ```julia
-using LZOTools
+using LibLZO
 
 const lorem = b"""Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
 incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud

@@ -69,6 +69,6 @@ jobs:
         shell: julia --project=docs --color=yes {0}
         run: |
           using Documenter: DocMeta, doctest
-          using LZOTools
-          DocMeta.setdocmeta!(LZOTools, :DocTestSetup, :(using LZOTools); recursive=true)
-          doctest(LZOTools)
+          using LibLZO
+          DocMeta.setdocmeta!(LibLZO, :DocTestSetup, :(using LibLZO); recursive=true)
+          doctest(LibLZO)

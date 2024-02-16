@@ -1,14 +1,14 @@
-using LZOTools
+using LibLZO
 using Documenter
 
-DocMeta.setdocmeta!(LZOTools, :DocTestSetup, :(using LZOTools); recursive=true)
+DocMeta.setdocmeta!(LibLZO, :DocTestSetup, :(using LibLZO); recursive=true)
 
 makedocs(;
-    modules=[LZOTools],
+    modules=[LibLZO],
     authors="Phil Killewald <reallyasi9@users.noreply.github.com> and contributors",
-    sitename="LZOTools.jl",
+    sitename="LibLZO.jl",
     format=Documenter.HTML(;
-        canonical="https://reallyasi9.github.io/LZOTools.jl",
+        canonical="https://reallyasi9.github.io/LibLZO.jl",
         edit_link="main",
         assets=String[],
     ),
@@ -18,6 +18,6 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/reallyasi9/LZOTools.jl",
+    repo="github.com/reallyasi9/LibLZO.jl",
     devbranch="main",
 )
