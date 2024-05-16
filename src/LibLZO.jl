@@ -5,7 +5,7 @@ export compress, unsafe_compress!
 export decompress, unsafe_decompress!
 export optimize!, unsafe_optimize!
 
-export AbstractLZOAlgorithm, AbstractLZOLevelAlgorithm
+export AbstractLZOAlgorithm
 export LZO1X_1, LZO1X, LZO
 export LZO1X_1_11, LZO1X_1_12, LZO1X_1_15, LZO1X_999
 export LZO1, LZO1_99
