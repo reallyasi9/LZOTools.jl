@@ -46,6 +46,8 @@ function decompress(::Type{LZO1B}, src; kwargs...)
     return decompress(algo, src)
 end
 
+compression_level(algo::LZO1B) = algo.compression_level
+
 """
     LZO1B_99
 

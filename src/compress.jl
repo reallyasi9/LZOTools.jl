@@ -125,7 +125,8 @@ compress(algo::AbstractString, src; kwargs...) = compress(Symbol(algo), src; kwa
 compress(src; kwargs...) = compress(LZO1X_1, src; kwargs...)
 
 # Call compression library function from the algorithm struct
-_ccall_compress!(algo::AbstractLZOAlgorithm, dest::Ptr{UInt8}, src::Ptr{UInt8}, src_size::Integer) = nothing
+# _ccall_compress!(algo::AbstractLZOAlgorithm, dest::Ptr{UInt8}, src::Ptr{UInt8}, src_size::Integer) = throw(ErrorException("method _ccall_compress! for algorithm $(typeof(algo)) not defined"))
+function _call_compress! end
 
 """
     max_compressed_length(algo, n)::Int
@@ -139,3 +140,10 @@ function max_compressed_length(::AbstractLZOAlgorithm, n::Integer)
     # return (n <= 18 ? 1 : (((n - 18) ÷ 255) + 2)) + n + 3
     return n + (n ÷ 16) + 64 + 3
 end
+
+"""
+    compression_level(algo)::Int
+
+Return the compression level of the algorithm. If the algorithm does not have a defined adjustable compression level, return 0.
+"""
+compression_level(algo::AbstractLZOAlgorithm) = 0

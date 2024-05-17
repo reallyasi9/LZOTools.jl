@@ -1,7 +1,7 @@
 name = "LibLZO"
 uuid = "32aa4ff1-cc5a-4ead-abec-09bb076ef871"
 authors = ["Phil Killewald <reallyasi9@users.noreply.github.com> and contributors"]
-version = "1.1.0"
+version = "1.2.0"
 
 [deps]
 LZO_jll = "dd4b983a-f0e5-5f8d-a1b7-129d4a5fb1ac"
@@ -12,8 +12,9 @@ julia = "1.6"
 
 [extras]
 LazyArtifacts = "4af54fe1-eca0-43a8-85a7-787d91b784e3"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 TestItemRunner = "f8b46487-2199-4994-9208-9a1283c18c0a"
 
 [targets]
-test = ["Test", "TestItemRunner", "LazyArtifacts"]
+test = ["Test", "TestItemRunner", "LazyArtifacts", "Random"]

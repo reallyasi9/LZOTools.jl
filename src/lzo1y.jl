@@ -86,6 +86,8 @@ function _ccall_compress!(algo::LZO1Y_999, dest::Ptr{UInt8}, src::Ptr{UInt8}, sr
     return size_ptr[], err
 end
 
+compression_level(algo::LZO1Y_999) = algo.compression_level
+
 # all LZO1Y algorithms use the same decompression algorithm
 for algo = (:LZO1Y_999,)
     @eval unsafe_decompress!(::$algo, dest::AbstractVector{UInt8}, src::AbstractVector{UInt8}) = unsafe_decompress!(LZO1Y_1, dest, src)

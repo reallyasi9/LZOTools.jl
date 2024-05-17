@@ -45,3 +45,9 @@ function decompress(::Type{LZO2A_999}, src; kwargs...)
     algo = LZO2A_999(working_memory = UInt8[])
     return decompress(algo, src)
 end
+
+function max_compressed_length(::LZO2A_999, n::Integer)
+    n == 0 && return 0 # nothing compresses to nothing
+    # return (n <= 18 ? 1 : (((n - 18) ÷ 255) + 2)) + n + 3
+    return (n + (n ÷ 16) + 64 + 3)*2
+end
