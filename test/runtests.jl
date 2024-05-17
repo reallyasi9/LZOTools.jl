@@ -101,6 +101,22 @@ end
 
 @testitem "levels" begin
     using LazyArtifacts
+    using Random
+
+    let
+        algos = (
+            LZO1X_1, LZO1X_1_11, LZO1X_1_12, LZO1X_1_15,
+            LZO1B_99,
+            LZO1C_99, LZO1C_999,
+            LZO1F_1, LZO1F_999,
+            LZO1Y_1,
+            LZO2A_999,
+        )
+        for algo in algos
+            algo_obj = algo()
+            @test compression_level(algo_obj) == 0
+        end
+    end
 
     let 
         algos = (
@@ -114,6 +130,7 @@ end
             last_size = typemax(Int)
             for level in 1:9
                 algo_obj = algo(; compression_level=level)
+                @test compression_level(algo_obj) == level
                 c = compress(algo_obj, truth)
                 d = decompress(algo_obj, c)
                 @info "level compression complete" algorithm=algo level=level ratio=length(c)/length(truth)

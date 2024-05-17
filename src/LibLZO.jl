@@ -4,6 +4,7 @@ using LZO_jll
 export compress, unsafe_compress!
 export decompress, unsafe_decompress!
 export optimize!, unsafe_optimize!
+export compression_level
 
 export AbstractLZOAlgorithm
 export LZO1X_1, LZO1X, LZO

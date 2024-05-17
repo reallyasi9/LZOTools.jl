@@ -139,3 +139,10 @@ function max_compressed_length(::AbstractLZOAlgorithm, n::Integer)
     # return (n <= 18 ? 1 : (((n - 18) ÷ 255) + 2)) + n + 3
     return n + (n ÷ 16) + 64 + 3
 end
+
+"""
+    compression_level(algo)::Int
+
+Return the compression level of the algorithm. If the algorithm does not have a defined adjustable compression level, return 0.
+"""
+compression_level(algo::AbstractLZOAlgorithm) = 0
