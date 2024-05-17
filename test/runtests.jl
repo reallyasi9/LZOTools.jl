@@ -3,7 +3,7 @@ using TestItemRunner
 
 @testitem "Canterbury safe round-trip" begin
     using LazyArtifacts
-
+    using Random
 
     let 
         algos = (
@@ -31,12 +31,26 @@ using TestItemRunner
                 @info "safe round-trip complete" algorithm=algo file=last(splitpath(fn)) filesize=length(truth) ratio=length(c)/length(truth) compress_time_ns_per_byte=(t2-t1)/length(truth)*cpu_ghz decompress_time_ns_per_byte=(t4-t3)/length(truth)*cpu_ghz
             end
         end
+
+        # true random
+        random_data = rand(MersenneTwister(0), UInt8, 1_000_000)
+        for algo in algos
+            t1 = time_ns()
+            c = compress(algo, random_data)
+            t2 = time_ns()
+
+            t3 = time_ns()
+            d = decompress(algo, c)
+            t4 = time_ns()
+            @test d == random_data
+            @info "safe round-trip complete" algorithm=algo file="random" filesize=length(random_data) ratio=length(c)/length(random_data) compress_time_ns_per_byte=(t2-t1)/length(random_data)*cpu_ghz decompress_time_ns_per_byte=(t4-t3)/length(random_data)*cpu_ghz
+        end
     end
 end
 
 @testitem "Canterbury unsafe round-trip" begin
     using LazyArtifacts
-
+    using Random
 
     let 
         algos = (
@@ -55,7 +69,7 @@ end
         for fn in readdir(cc_path; sort=true, join=true)
             truth = read(fn)
             for algo in algos
-                c = zeros(UInt8, length(truth))
+                c = zeros(UInt8, length(truth)*2)
                 t1 = time_ns()
                 nc = unsafe_compress!(algo, c, truth)
                 t2 = time_ns()
@@ -70,6 +84,25 @@ end
                 @test d == truth
                 @info "unsafe round-trip complete" algorithm=algo file=last(splitpath(fn)) filesize=length(truth) ratio=length(c)/length(truth) compress_time_cycles_per_byte=(t2-t1)/length(truth)*cpu_ghz decompress_time_cycles_per_byte=(t4-t3)/length(truth)*cpu_ghz
             end
+        end
+
+        # true random
+        random_data = rand(MersenneTwister(0), UInt8, 1_000_000)
+        for algo in algos
+            c = zeros(UInt8, length(random_data)*2)
+            t1 = time_ns()
+            nc = unsafe_compress!(algo, c, random_data)
+            t2 = time_ns()
+
+            resize!(c, nc)
+            d = zeros(UInt8, length(random_data)*2) # just in case
+            t3 = time_ns()
+            nd = unsafe_decompress!(algo, d, c)
+            t4 = time_ns()
+            @test nd == length(random_data)
+            resize!(d, nd)
+            @test d == random_data
+            @info "unsafe round-trip complete" algorithm=algo file="random" filesize=length(random_data) ratio=length(c)/length(random_data) compress_time_cycles_per_byte=(t2-t1)/length(random_data)*cpu_ghz decompress_time_cycles_per_byte=(t4-t3)/length(random_data)*cpu_ghz
         end
     end
 end
@@ -147,6 +180,7 @@ end
 
 @testitem "optimize" begin
     using LazyArtifacts
+    using Random
 
     let 
         algos = (

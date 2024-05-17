@@ -125,7 +125,8 @@ compress(algo::AbstractString, src; kwargs...) = compress(Symbol(algo), src; kwa
 compress(src; kwargs...) = compress(LZO1X_1, src; kwargs...)
 
 # Call compression library function from the algorithm struct
-_ccall_compress!(algo::AbstractLZOAlgorithm, dest::Ptr{UInt8}, src::Ptr{UInt8}, src_size::Integer) = nothing
+# _ccall_compress!(algo::AbstractLZOAlgorithm, dest::Ptr{UInt8}, src::Ptr{UInt8}, src_size::Integer) = throw(ErrorException("method _ccall_compress! for algorithm $(typeof(algo)) not defined"))
+function _call_compress! end
 
 """
     max_compressed_length(algo, n)::Int
