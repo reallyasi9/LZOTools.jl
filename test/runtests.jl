@@ -48,6 +48,48 @@ using TestItemRunner
     end
 end
 
+@testitem "Canterbury safe in-place round trip" begin
+    using LazyArtifacts
+    using Random
+
+    let 
+        algos = (
+            LZO1X_1, LZO1X_1_11, LZO1X_1_12, LZO1X_1_15, LZO1X_999,
+            LZO1B, LZO1B_99,
+            LZO1C, LZO1C_99, LZO1C_999,
+            LZO1F_1, LZO1F_999,
+            LZO1Y_1, LZO1Y_999,
+            LZO1Z_999,
+            LZO2A_999,
+        )
+        cc_path = artifact"CanterburyCorpus"
+        for fn in readdir(cc_path; sort=true, join=true)
+            truth = read(fn)
+            for algo in algos
+                c = compress(algo, truth)
+                d1 = zeros(UInt8, length(truth) + 1)
+                l = decompress!(algo, d1, c)
+                @test l == length(truth)
+                @test first(d1, l) == truth
+                d2 = zeros(UInt8, l-1)
+                @test_throws OverflowError decompress!(algo, d2, c)
+            end
+        end
+
+        # true random
+        random_data = rand(MersenneTwister(0), UInt8, 1_000_000)
+        for algo in algos
+            c = compress(algo, random_data)
+            d1 = zeros(UInt8, length(random_data) + 1)
+            l = decompress!(algo, d1, c)
+            @test l == length(random_data)
+            @test first(d1, l) == random_data
+            d2 = zeros(UInt8, l-1)
+            @test_throws OverflowError decompress!(algo, d2, c)
+        end
+    end
+end
+
 @testitem "Canterbury unsafe round-trip" begin
     using LazyArtifacts
     using Random

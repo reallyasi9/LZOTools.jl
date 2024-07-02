@@ -2,7 +2,7 @@ module LibLZO
 using LZO_jll
 
 export compress, unsafe_compress!
-export decompress, unsafe_decompress!
+export decompress, decompress!, unsafe_decompress!
 export optimize!, unsafe_optimize!
 export compression_level
 

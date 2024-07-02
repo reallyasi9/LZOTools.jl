@@ -46,6 +46,11 @@ function decompress(::Type{LZO1B}, src; kwargs...)
     return decompress(algo, src)
 end
 
+function decompress!(::Type{LZO1B}, dest, src; kwargs...)
+    algo = LZO1B(working_memory = UInt8[])
+    return decompress!(algo, dest, src)
+end
+
 compression_level(algo::LZO1B) = algo.compression_level
 
 """
@@ -71,4 +76,5 @@ end
 for algo = (:LZO1B_99,)
     @eval unsafe_decompress!(::$algo, dest::AbstractVector{UInt8}, src::AbstractVector{UInt8}) = unsafe_decompress!(LZO1B, dest, src)
     @eval decompress(::$algo, src::AbstractVector{UInt8}) = decompress(LZO1B, src)
+    @eval decompress!(::$algo, dest::AbstractVector{UInt8}, src::AbstractVector{UInt8}) = decompress!(LZO1B, dest, src)
 end

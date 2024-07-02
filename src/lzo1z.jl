@@ -48,4 +48,9 @@ function decompress(::Type{LZO1Z_999}, src; kwargs...)
     return decompress(algo, src)
 end
 
+function decompress!(::Type{LZO1Z_999}, dest, src; kwargs...)
+    algo = LZO1Z_999(working_memory = UInt8[])
+    return decompress!(algo, dest, src)
+end
+
 compression_level(algo::LZO1Z_999) = algo.compression_level

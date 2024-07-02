@@ -51,6 +51,11 @@ function decompress(::Type{LZO1X_1}, src; kwargs...)
     return decompress(algo, src)
 end
 
+function decompress!(::Type{LZO1X_1}, dest, src; kwargs...)
+    algo = LZO1X_1(working_memory = UInt8[])
+    return decompress!(algo, dest, src)
+end
+
 function _ccall_optimize!(algo::LZO1X_1, dest::Ptr{UInt8}, dest_size::Integer, src::Ptr{UInt8}, src_size::Integer)
     size_ptr = Ref{Csize_t}(dest_size)
     err = @ccall liblzo2.lzo1x_optimize(src::Ptr{Cuchar}, src_size::Csize_t, dest::Ptr{Cuchar}, size_ptr::Ptr{Csize_t}, algo.working_memory::Ptr{Cvoid})::Cint
@@ -153,6 +158,7 @@ compression_level(algo::LZO1X_999) = algo.compression_level
 for algo = (:LZO1X_1_11, :LZO1X_1_12, :LZO1X_1_15, :LZO1X_999)
     @eval unsafe_decompress!(::$algo, dest::AbstractVector{UInt8}, src::AbstractVector{UInt8}) = unsafe_decompress!(LZO1X_1, dest, src)
     @eval decompress(::$algo, src::AbstractVector{UInt8}) = decompress(LZO1X_1, src)
+    @eval decompress!(::$algo, dest::AbstractVector{UInt8}, src::AbstractVector{UInt8}) = decompress!(LZO1X_1, dest, src)
 end
 
 # all LZO1X algorithms use the same optimization algorithm
