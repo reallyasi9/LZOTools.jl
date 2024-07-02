@@ -41,6 +41,11 @@ function decompress(::Type{LZO1F_1}, src; kwargs...)
     return decompress(algo, src)
 end
 
+function decompress!(::Type{LZO1F_1}, dest, src; kwargs...)
+    algo = LZO1F_1(working_memory = UInt8[])
+    return decompress!(algo, dest, src)
+end
+
 # special version: because LZO1F_1 does not need working memory, save on the allocations
 function unsafe_decompress!(::Type{LZO1F_1}, dest, src; kwargs...)
     algo = LZO1F_1(working_memory = UInt8[])
@@ -70,4 +75,5 @@ end
 for algo = (:LZO1F_999,)
     @eval unsafe_decompress!(::$algo, dest::AbstractVector{UInt8}, src::AbstractVector{UInt8}) = unsafe_decompress!(LZO1F_1, dest, src)
     @eval decompress(::$algo, src::AbstractVector{UInt8}) = decompress(LZO1F_1, src)
+    @eval decompress!(::$algo, dest::AbstractVector{UInt8}, src::AbstractVector{UInt8}) = decompress!(LZO1F_1, dest, src)
 end

@@ -34,6 +34,42 @@ unsafe_decompress!(algo::Symbol, dest, src; kwargs...) = unsafe_decompress!(_SYM
 unsafe_decompress!(algo::AbstractString, dest, src; kwargs...) = unsafe_decompress!(Symbol(algo), dest, src; kwargs...)
 unsafe_decompress!(dest, src; kwargs...) = unsafe_decompress!(LZO1X_1, dest, src; kwargs...)
 
+
+"""
+    decompress!([algorithm], dest::AbstractVector{UInt8}, src::AbstractVector{UInt8}; [kwargs...])::Int
+
+Decompress `src` into `dest` using LZO algorithm `algorithm`. Only available for algorithms with safe decompression functions defined.
+
+Returns the number of bytes written to the beginning of `dest`.
+
+The `algorithm` argument, if given, can be an instance of an `AbstractLZOAlgorithm`, a `Type{<:AbstractLZOAlgorithm}`, or a `Symbol` or `String` that names an LZO algorithm. The supported decompression algorithm types are listed below--the symbol and string versions are the same, case-sensitive characters as the type name:
+
+- `LZO1X_1`, `:LZO1X_1`, or `"LZO1X_1"` (also `LZO1X`, `LZO`, `LZO1X_1_11`, `LZO1X_1_12`, `LZO1X_1_15`, or `LZO1X_999`, and is the default if no algorithm is given)
+- `LZO1B_1` (also `LZO1B`, `LZO1B_2`, `LZO1B_3`, `LZO1B_4`, `LZO1B_5`, `LZO1B_6`, `LZO1B_7`, `LZO1B_8`, `LZO1B_9`, `LZO1B_99`, or `LZO1B_999`)
+- `LZO1C_1` (also `LZO1C`, `LZO1C_2`, `LZO1C_3`, `LZO1C_4`, `LZO1C_5`, `LZO1C_6`, `LZO1C_7`, `LZO1C_8`, `LZO1C_9`, `LZO1C_99`, or `LZO1C_999`)
+- `LZO1F_1` (also `LZO1F` or `LZO1F_999`)
+- `LZO1Y_1` (also `LZO1Y` or `LZO1Y_999`)
+- `LZO1Z_999` (also `LZO1Z`)
+- `LZO2A_999` (also `LZO2A`)
+
+Keyword arguments `kwargs`, if given, are passed to the algorithm struct constructors. See the documentation for the specific algorithm type for more information about valid keyword arguments and defaults.
+"""
+function decompress!(algo::AbstractLZOAlgorithm, dest::AbstractVector{UInt8}, src::AbstractVector{UInt8})
+    isempty(src) && return 0
+    output_size, err = GC.@preserve dest src _ccall_safe_decompress!(algo, pointer(dest), length(dest), pointer(src), length(src))
+    if err == -5 # destination overrun, must resize
+        throw(OverflowError("destination too small for decompressed output"))
+    elseif err != 0
+        throw(ErrorException("lzo decompression error $err"))
+    end
+    return output_size
+end
+
+decompress!(algo::Type{<:AbstractLZOAlgorithm}, dest, src; kwargs...) = decompress!(algo(; kwargs...), dest, src)
+decompress!(algo::Symbol, dest, src; kwargs...) = decompress!(_SYMBOL_LOOKUP[algo], dest, src; kwargs...)
+decompress!(algo::AbstractString, dest, src; kwargs...) = decompress!(Symbol(algo), dest, src; kwargs...)
+decompress!(src, dest; kwargs...) = decompress!(LZO1X_1, dest, src; kwargs...)
+
 """
     decompress([algorithm], src::AbstractVector{UInt8}; [kwargs...])::Vector{UInt8}
 
