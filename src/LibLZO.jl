@@ -1,5 +1,5 @@
 module LibLZO
-using LZO_jll
+using LZO_jll: liblzo2
 
 export compress, unsafe_compress!
 export decompress, decompress!, unsafe_decompress!
