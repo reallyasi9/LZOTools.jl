@@ -73,6 +73,7 @@ This package exports the following methods for interfacing with liblzo2:
 - `compress(algo, src::AbstractVector{UInt8})`: compress data in `src` using algorithm `algo` and return the result.
 - `unsafe_compress!(algo, dest::AbstractVector{UInt8}, src::AbstractVector{UInt8})`: compress data from `src` to `dest` using algorithm `algo` with no overflow checking and return the number of bytes overwritten at the front of `dest`.
 - `decompress(algo, src::AbstractVector{UInt8})`: decompress data in `src` using algorithm `algo` and return the result.
+- `decompress!(algo, dest::AbstractVector{UInt8}, src::AbstractVector{UInt8})`: decompress data in `src` to `dest` in-place using algorithm `algo` and return the number of bytes written, or throw an exception if `dest` is not large enough to hold the decompressed version of `src`.
 - `unsafe_decompress!(algo, dest::AbstractVector{UInt8}, src::AbstractVector{UInt8})`: decompress data from `scr` to `dest` using algorithm `algo` with no overflow checking and return the number of bytes overwritten at the front of `dest`.
 - `optimize!(algo, src::AbstractVector{UInt8})`: attempt to reduce the size of data in `src` that was compressed using algorithm `algo`, operating on `src` in-place.
 - `unsafe_optimze!(algo, dest::AbstractVector{UInt8}, src::AbstractVector{UInt8})`: attempt to reduce the size of data in `src` that was compressed using algorithm `algo` by decompressing it into `dest` with no overflow checking, operating on `src` in-place.
@@ -111,7 +112,7 @@ The package also exports the following LZO algorithm types, representing all the
 
 The following matrix describes which methods are available for which LZO family types:
 
-| Family | compress | unsafe_compress! | decompress | unsafe_decompress! | optimize! | unsafe_optimize! |
+| Family | compress | unsafe_compress! | decompress/decompress! | unsafe_decompress! | optimize! | unsafe_optimize! |
 |-------:|:--------:|:----------------:|:----------:|:------------------:|:---------:|:----------------:|
 | LZO1X | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | LZO1Y | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -126,15 +127,15 @@ The following matrix describes which methods are available for which LZO family 
 ## Notes and Warnings
 
 ### "Unsafe" means UNSAFE!
-The `unsafe_*` methods are truly unsafe: if the user-supplied destination vector is not large enough to hold the output, the [behavior is undefined](https://en.cppreference.com/w/c/language/behavior) and [very bad things could happen](https://devblogs.microsoft.com/oldnewthing/20140627-00/?p=633). Unless you are absolutely sure about what you are doing and are in complete control of the source data, use the `compress`, `decompress`, and `optimize!` methods instead.
+The `unsafe_*` methods are truly unsafe: if the user-supplied destination vector is not large enough to hold the output, the [behavior is undefined](https://en.cppreference.com/w/c/language/behavior) and [very bad things could happen](https://devblogs.microsoft.com/oldnewthing/20140627-00/?p=633). Unless you are absolutely sure about what you are doing and are in complete control of the source data, use the `compress`, `decompress`/`decompress!`, and `optimize!` methods instead.
 
 ### Always use the same algorithm family that was used to compress data to decompress that data
-This should go without saying, but if you attempt to decompress data with a different algorithm than was used to compress the data, undefined behavior will occur. This will typically result in an exception being thrown by the safe `decompress` method, but not always: for instance, data compressed by the LZO1X family can usually be decompressed using the LZO1Y family without throwing an exception, but the output will be gibberish. There is no good way for the `decompress` method to detect the algorithm used to compress the data, so it is up to the user to keep the compression and decompression algorithms aligned.
+This should go without saying, but if you attempt to decompress data with a different algorithm than was used to compress the data, undefined behavior will occur. This will typically result in an exception being thrown by the safe `decompress`/`decompress!` methods, but not always: for instance, data compressed by the LZO1X family can usually be decompressed using the LZO1Y family without throwing an exception, but the output will be gibberish. There is no good way for the `decompress`/`decompress!` methods to detect the algorithm used to compress the data, so it is up to the user to keep the compression and decompression algorithms aligned.
 
 That being said, all algorithms in the same algorithm _family_ use the same underlying decompression function. You can, for instance, compress data using `LZO1X_1` and decompress it using `LZO1X_999` without any issues.
 
 ### Safe decompression may mean multiple attempts to decompress
-The safe decompression method `decompress` works by attempting to decompress the source into a destination vector, catching the overrun exception returned by the liblzo2 library, then increasing the size of the destination and trying again until the decompression succeeds. This means the method may take several times longer and make more allocations than expected to successfully decompress data. If decompression speed or memory efficiency is paramount, use `unsafe_decompress!`, but **be warned that "unsafe" means UNSAFE** (see above).
+The safe decompression method `decompress` works by attempting to decompress the source into a destination vector, catching the overrun exception returned by the liblzo2 library, then increasing the size of the destination and trying again until the decompression succeeds. This means the method may take several times longer and make more allocations than expected to successfully decompress data. If decompression speed or memory efficiency is paramount, use the in-place `decompress!` or `unsafe_decompress!` methods, but **be warned that "unsafe" means UNSAFE** (see above).
 
 ### Optimization doesn't do much, if anything at all
 The optimization feature of the LZO1X and LZO1Y family of algorithms attempts to shuffle around literal copy commands to save on storage and potentially improve decompression speed. Because of the rarity of the special circumstances required to shuffle the literal copy commands around, optimization is expected to reduce the number of bytes necessary to store the compressed data by at most 0.01%, and benchmarks I have performed on modern processors show no difference in decompression speeds between optimized and unoptimized data. The methods are included for completeness' sake, but I do not recommend their use.
