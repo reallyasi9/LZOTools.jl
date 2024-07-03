@@ -40,7 +40,7 @@ unsafe_decompress!(dest, src; kwargs...) = unsafe_decompress!(LZO1X_1, dest, src
 
 Decompress `src` into `dest` using LZO algorithm `algorithm`. Only available for algorithms with safe decompression functions defined.
 
-Returns the number of bytes written to the beginning of `dest`.
+Returns the number of bytes written to the beginning of `dest`. Throws an `OverflowError` if the decompressed data will not fit into `dest`.
 
 The `algorithm` argument, if given, can be an instance of an `AbstractLZOAlgorithm`, a `Type{<:AbstractLZOAlgorithm}`, or a `Symbol` or `String` that names an LZO algorithm. The supported decompression algorithm types are listed below--the symbol and string versions are the same, case-sensitive characters as the type name:
 
